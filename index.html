@@ -28,6 +28,32 @@
         canvas {
             border: 3px solid #34495e;
             background-color: #1a1a1a;
+            max-width: 100%;
+            height: auto;
+        }
+        
+        /* Mobile-specific styles */
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 1.5em;
+                margin-bottom: 10px;
+            }
+            
+            canvas {
+                width: calc(100vw - 40px);
+                max-width: 400px;
+                height: calc(100vw - 40px);
+                max-height: 400px;
+            }
+            
+            .instructions {
+                font-size: 14px;
+                margin-top: 10px;
+            }
         }
         
         .instructions {
@@ -41,11 +67,23 @@
     <div class="game-container">
         <h1>Snake Game</h1>
         <canvas id="gameCanvas" width="500" height="500"></canvas>
-        <div class="instructions">
-            Use arrow keys to control the snake
+        <div class="instructions" id="instructions">
+            Use arrow keys to control the snake • Press space to pause
         </div>
     </div>
     
     <script src="snake.js"></script>
+    <script>
+        // Update instructions based on device type
+        window.addEventListener('load', () => {
+            const instructions = document.getElementById('instructions');
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+                             ('ontouchstart' in window);
+            
+            if (isMobile) {
+                instructions.textContent = 'Swipe to move the snake • Tap to pause';
+            }
+        });
+    </script>
 </body>
 </html>

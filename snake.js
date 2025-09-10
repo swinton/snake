@@ -33,6 +33,13 @@ class SnakeGame {
         this.score = 0;
         this.highScore = 0;
         
+        // Touch control properties
+        this.touchStartX = 0;
+        this.touchStartY = 0;
+        this.touchEndX = 0;
+        this.touchEndY = 0;
+        this.minSwipeDistance = 30; // Minimum distance for a swipe to register
+        
         // Background colors for score milestones
         this.backgroundColors = [
             '#1a1a1a', // Default dark
@@ -66,6 +73,10 @@ class SnakeGame {
         // Set up keyboard controls
         document.addEventListener('keydown', (e) => this.handleKeyPress(e));
         
+        // Set up touch controls for mobile
+        this.canvas.addEventListener('touchstart', (e) => this.handleTouchStart(e));
+        this.canvas.addEventListener('touchend', (e) => this.handleTouchEnd(e));
+        
         // Start the game loop
         this.gameLoop();
     }
@@ -97,6 +108,12 @@ class SnakeGame {
         const colorIndex = Math.floor(this.score / 10) % this.backgroundColors.length;
         const newColor = this.backgroundColors[colorIndex];
         document.body.style.backgroundColor = newColor;
+    }
+    
+    isMobileDevice() {
+        // Detect if user is on a mobile device
+        return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+               ('ontouchstart' in window);
     }
     
     endGame() {
@@ -149,6 +166,75 @@ class SnakeGame {
                     this.nextDirection = { x: 1, y: 0 };
                 }
                 break;
+        }
+    }
+    
+    handleTouchStart(e) {
+        e.preventDefault();
+        const touch = e.touches[0];
+        this.touchStartX = touch.clientX;
+        this.touchStartY = touch.clientY;
+    }
+    
+    handleTouchEnd(e) {
+        e.preventDefault();
+        const touch = e.changedTouches[0];
+        this.touchEndX = touch.clientX;
+        this.touchEndY = touch.clientY;
+        
+        this.handleSwipe();
+    }
+    
+    handleSwipe() {
+        const deltaX = this.touchEndX - this.touchStartX;
+        const deltaY = this.touchEndY - this.touchStartY;
+        const absDeltaX = Math.abs(deltaX);
+        const absDeltaY = Math.abs(deltaY);
+        
+        // Check if this is a tap (very small movement) for pause functionality
+        if (absDeltaX < 10 && absDeltaY < 10) {
+            if (!this.gameRunning) {
+                this.startNewGame();
+            } else {
+                // Toggle pause when game is running
+                this.gamePaused = !this.gamePaused;
+            }
+            return;
+        }
+        
+        // Only process swipes if game is running and not paused
+        if (!this.gameRunning || this.gamePaused) return;
+        
+        // Check if swipe is long enough
+        if (absDeltaX < this.minSwipeDistance && absDeltaY < this.minSwipeDistance) return;
+        
+        // Determine swipe direction - prioritize the larger movement
+        if (absDeltaX > absDeltaY) {
+            // Horizontal swipe
+            if (deltaX > 0) {
+                // Swipe right
+                if (this.direction.x === 0) {
+                    this.nextDirection = { x: 1, y: 0 };
+                }
+            } else {
+                // Swipe left
+                if (this.direction.x === 0) {
+                    this.nextDirection = { x: -1, y: 0 };
+                }
+            }
+        } else {
+            // Vertical swipe
+            if (deltaY > 0) {
+                // Swipe down
+                if (this.direction.y === 0) {
+                    this.nextDirection = { x: 0, y: 1 };
+                }
+            } else {
+                // Swipe up
+                if (this.direction.y === 0) {
+                    this.nextDirection = { x: 0, y: -1 };
+                }
+            }
         }
     }
     
@@ -295,8 +381,16 @@ class SnakeGame {
             this.ctx.fillStyle = '#e74c3c';
             this.ctx.font = '24px Arial';
             this.ctx.textAlign = 'center';
-            this.ctx.fillText('Game Over!', this.canvasSize / 2, this.canvasSize / 2 - 20);
-            this.ctx.fillText('Press SPACE to play again', this.canvasSize / 2, this.canvasSize / 2 + 20);
+            this.ctx.fillText('Game Over!', this.canvasSize / 2, this.canvasSize / 2 - 40);
+            
+            // Show appropriate restart instructions
+            this.ctx.font = '16px Arial';
+            this.ctx.fillStyle = '#ffffff';
+            if (this.isMobileDevice()) {
+                this.ctx.fillText('Tap to play again', this.canvasSize / 2, this.canvasSize / 2 - 10);
+            } else {
+                this.ctx.fillText('Press SPACE to play again', this.canvasSize / 2, this.canvasSize / 2 - 10);
+            }
         }
         
         // Draw pause message
@@ -307,8 +401,16 @@ class SnakeGame {
             this.ctx.fillStyle = '#f39c12';
             this.ctx.font = '24px Arial';
             this.ctx.textAlign = 'center';
-            this.ctx.fillText('PAUSED', this.canvasSize / 2, this.canvasSize / 2 - 20);
-            this.ctx.fillText('Press SPACE to resume', this.canvasSize / 2, this.canvasSize / 2 + 20);
+            this.ctx.fillText('PAUSED', this.canvasSize / 2, this.canvasSize / 2 - 30);
+            
+            // Show appropriate resume instructions
+            this.ctx.font = '16px Arial';
+            this.ctx.fillStyle = '#ffffff';
+            if (this.isMobileDevice()) {
+                this.ctx.fillText('Tap to resume', this.canvasSize / 2, this.canvasSize / 2);
+            } else {
+                this.ctx.fillText('Press SPACE to resume', this.canvasSize / 2, this.canvasSize / 2);
+            }
         }
         
         // Draw score information
@@ -317,6 +419,14 @@ class SnakeGame {
         this.ctx.textAlign = 'left';
         this.ctx.fillText(`Score: ${this.score}`, 10, 25);
         this.ctx.fillText(`High Score: ${this.highScore}`, 10, 45);
+        
+        // Show mobile instructions on first load
+        if (this.score === 0 && this.gameRunning && !this.gamePaused && this.isMobileDevice()) {
+            this.ctx.font = '12px Arial';
+            this.ctx.textAlign = 'center';
+            this.ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+            this.ctx.fillText('Swipe to move • Tap to pause', this.canvasSize / 2, this.canvasSize - 10);
+        }
     }
     
     gameLoop() {
