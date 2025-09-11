@@ -84,7 +84,8 @@ class SnakeGame {
     // Cookie utility functions
     setCookie(name, value, days = 365) {
         const expires = new Date(Date.now() + days * 864e5).toUTCString();
-        document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/`;
+        const isSecure = location.protocol === 'https:' ? '; Secure' : '';
+        document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/${isSecure}; SameSite=Lax`;
     }
     
     getCookie(name) {
