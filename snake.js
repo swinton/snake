@@ -26,8 +26,9 @@ class SnakeGame {
         this.nextDirection = { x: 1, y: 0 };
         
         // Game state
-        this.gameRunning = true;
+        this.gameRunning = false; // Start in waiting state
         this.gamePaused = false;
+        this.gameWaiting = true; // New state for waiting to start
         
         // Score tracking
         this.score = 0;
@@ -77,8 +78,8 @@ class SnakeGame {
         this.canvas.addEventListener('touchstart', (e) => this.handleTouchStart(e));
         this.canvas.addEventListener('touchend', (e) => this.handleTouchEnd(e));
         
-        // Start the game loop
-        this.gameLoop();
+        // Start the render loop (but game won't start until user input)
+        this.renderLoop();
     }
     
     // Cookie utility functions
@@ -128,10 +129,13 @@ class SnakeGame {
     }
     
     handleKeyPress(e) {
-        // Handle space bar for new game or pause/unpause
+        // Handle space bar for starting game, new game, or pause/unpause
         if (e.key === ' ') {
             e.preventDefault();
-            if (!this.gameRunning) {
+            if (this.gameWaiting) {
+                // Start the game for the first time
+                this.startGame();
+            } else if (!this.gameRunning) {
                 this.startNewGame();
             } else {
                 // Toggle pause when game is running
@@ -194,7 +198,10 @@ class SnakeGame {
         
         // Check if this is a tap (very small movement) for pause functionality
         if (absDeltaX < 10 && absDeltaY < 10) {
-            if (!this.gameRunning) {
+            if (this.gameWaiting) {
+                // Start the game for the first time
+                this.startGame();
+            } else if (!this.gameRunning) {
                 this.startNewGame();
             } else {
                 // Toggle pause when game is running
@@ -295,6 +302,13 @@ class SnakeGame {
         this.food = newFood;
     }
     
+    startGame() {
+        // Start the game from waiting state
+        this.gameWaiting = false;
+        this.gameRunning = true;
+        this.gamePaused = false;
+    }
+    
     startNewGame() {
         // Reset snake to initial position
         this.snake = [
@@ -313,6 +327,7 @@ class SnakeGame {
         this.generateFood();
         
         // Start the game
+        this.gameWaiting = false;
         this.gameRunning = true;
         this.gamePaused = false;
         
@@ -374,8 +389,28 @@ class SnakeGame {
             this.squareSize
         );
         
+        // Draw waiting to start message
+        if (this.gameWaiting) {
+            this.ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+            this.ctx.fillRect(0, 0, this.canvasSize, this.canvasSize);
+            
+            this.ctx.fillStyle = '#3498db';
+            this.ctx.font = '24px Arial';
+            this.ctx.textAlign = 'center';
+            this.ctx.fillText('Snake Game', this.canvasSize / 2, this.canvasSize / 2 - 40);
+            
+            // Show appropriate start instructions
+            this.ctx.font = '16px Arial';
+            this.ctx.fillStyle = '#ffffff';
+            if (this.isMobileDevice()) {
+                this.ctx.fillText('Tap to start playing', this.canvasSize / 2, this.canvasSize / 2 - 10);
+            } else {
+                this.ctx.fillText('Press SPACE to start playing', this.canvasSize / 2, this.canvasSize / 2 - 10);
+            }
+        }
+        
         // Draw game over message
-        if (!this.gameRunning) {
+        if (!this.gameRunning && !this.gameWaiting) {
             this.ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
             this.ctx.fillRect(0, 0, this.canvasSize, this.canvasSize);
             
@@ -430,13 +465,17 @@ class SnakeGame {
         }
     }
     
-    gameLoop() {
-        this.update();
+    renderLoop() {
+        // Only update game state if game is running and not paused
+        if (this.gameRunning && !this.gamePaused) {
+            this.update();
+        }
+        
         this.draw();
         
         // Run at 10 FPS for classic Snake feel
         setTimeout(() => {
-            requestAnimationFrame(() => this.gameLoop());
+            requestAnimationFrame(() => this.renderLoop());
         }, 100);
     }
 }

@@ -68,7 +68,7 @@
         <h1>Snake Game</h1>
         <canvas id="gameCanvas" width="500" height="500"></canvas>
         <div class="instructions" id="instructions">
-            Use arrow keys to control the snake • Press space to pause
+            Press SPACE to start • Use arrow keys to control the snake • Press space to pause
         </div>
     </div>
     
@@ -81,7 +81,7 @@
                              ('ontouchstart' in window);
             
             if (isMobile) {
-                instructions.textContent = 'Swipe to move the snake • Tap to pause';
+                instructions.textContent = 'Tap to start • Swipe to move the snake • Tap to pause';
             }
         });
     </script>
