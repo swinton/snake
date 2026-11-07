@@ -1,101 +1,88 @@
-# 🐍 Snake Game
+# SNAKE SNAKE SNAKE
 
-A classic Snake game built with HTML5 Canvas and vanilla JavaScript, styled as a 1980s arcade cabinet, with persistent scoring and full mobile support.
+[![Snake Snake Snake: neon arcade lettering and a glowing green snake on a CRT screen.](social-preview.png)](https://snakesnakesnake.com/)
 
-## 🎮 [Play the Game](https://snakesnakesnake.com/)
+**The arcade is open. You're up next.**
 
-**Live Demo:** https://snakesnakesnake.com/
+Step up to a neon-lit cabinet, chase the pink food, and see how long you can keep your snake alive. The walls are unforgiving. So is your own tail.
 
-## ✨ Features
+## 🕹️ [Press start](https://snakesnakesnake.com/)
 
-### 🎯 Core Gameplay
-- **Classic Snake Mechanics**: Navigate the snake to eat food and grow longer
-- **Collision Detection**: Game ends when hitting walls or the snake's own body
-- **Smooth Movement**: Responsive controls with 10 FPS classic Snake feel
+One player. Free play. Just one more game.
 
-### 📊 Scoring System
-- **Real-time Score Tracking**: Points increase with each food consumed
-- **Persistent High Score**: Best score saved locally using browser cookies
-- **Score Display**: Current and high scores visible during gameplay
+## Inside the cabinet
 
-### 🌈 Visual Features
-- **Arcade Cabinet**: Neon marquee, metal control deck, speaker grille, and free-play coin slot
-- **CRT Screen**: Scanlines, screen reflections, and glowing phosphor graphics
-- **Milestone Glow**: Cabinet lighting changes color every 10 points scored
-- **Visual Feedback**: Clear game states (playing, paused, game over)
-- **Responsive Design**: Optimized for both desktop and mobile devices
+- **That CRT glow.** Green phosphor graphics, scanlines, and screen reflections, framed by an amber marquee and pink and cyan trim.
+- **Controls you can press.** Steer with the cabinet's direction pad. The big pink button starts, pauses, resumes, and restarts the game.
+- **A score worth chasing.** Your best score survives the next visit, saved in a browser cookie. Current and high scores sit above the screen.
+- **A little light show.** The cabinet glow changes every 10 points as you work through a palette of 15 colors.
+- **Snake in the browser tab.** An animated favicon chases its own pink food. It pauses in background tabs and stays still when reduced motion is enabled.
+- **Even a wrong turn belongs here.** Missing pages get a custom 404 made from three glowing snakes, with a way back to the arcade.
 
-### 🎮 Controls
+## Eat. Grow. Repeat.
 
-#### Desktop
-- **Arrow Keys**: Control snake direction (↑ ↓ ← →)
-- **Spacebar**: Start, pause/resume, or restart after game over
-- **Cabinet Controls**: Click the direction pad to steer and the pink button to start, pause, resume, or restart
+Start the game, collect the pink food squares, and keep moving. Each bite earns a point and makes your snake longer. Hit a wall or your own body and it's game over.
 
-#### Mobile & Touch Devices
-- **Swipe Gestures**: Swipe in any direction to move the snake
-- **Tap to Pause**: Tap anywhere on the game canvas to pause/resume
-- **Tap to Restart**: Tap to start a new game after game over
+| Action | Keyboard | Touch | Cabinet controls |
+| --- | --- | --- | --- |
+| Start | Space | Tap the screen | Pink button |
+| Steer | Arrow keys | Swipe | Direction pad |
+| Pause / resume | Space | Tap the screen | Pink button |
+| Play again | Space after game over | Tap after game over | Pink button |
 
-### 📱 Mobile Optimizations
-- **Touch Controls**: Full gesture support for mobile gameplay
-- **Responsive Layout**: Canvas automatically resizes for mobile screens
-- **Device Detection**: Automatically shows appropriate control instructions
-- **Cross-Platform**: Works seamlessly on desktop, tablet, and mobile
+The cabinet resizes for desktop, tablet, and phone screens. Touch devices get their own control instructions.
 
-## 🚀 How to Play
+<details>
+<summary>The cabinet's color progression</summary>
 
-1. **Start**: Press space, tap the canvas, or press the pink cabinet button
-2. **Control**: Use arrow keys (desktop) or swipe (mobile) to change direction
-3. **Eat**: Guide the snake to the pink food squares to grow and score points
-4. **Avoid**: Don't hit the walls or the snake's own body
-5. **Pause**: Press spacebar (desktop) or tap the screen (mobile) to pause
-6. **Score**: Try to beat your high score and unlock new cabinet glow colors!
+| Score | Glow |
+| --- | --- |
+| 0–9 | Phosphor green |
+| 10–19 | Dark blue-gray |
+| 20–29 | Purple |
+| 30–39 | Red |
+| 40–49 | Orange |
+| 50–59 | Yellow |
+| 60–69 | Green |
+| 70–79 | Blue |
+| 80–89 | Light purple |
+| 90–99 | Dark orange |
+| 100–109 | Teal |
+| 110–119 | Dark gray |
+| 120–129 | Dark red |
+| 130–139 | Burnt orange |
+| 140–149 | Dark teal |
 
-### 🎨 Cabinet Glow Progression
-- **Score 0-9**: Phosphor Green
-- **Score 10-19**: Dark Blue-Gray
-- **Score 20-29**: Purple
-- **Score 30-39**: Red
-- **Score 40-49**: Orange
-- **Score 50-59**: Yellow
-- **Score 60-69**: Green
-- **Score 70-79**: Blue
-- **Score 80-89**: Light Purple
-- **Score 90-99**: Dark Orange
-- **Score 100-109**: Teal
-- **Score 110-119**: Dark Gray
-- **Score 120-129**: Dark Red
-- **Score 130-139**: Burnt Orange
-- **Score 140+**: Dark Teal (then cycles repeat)
+After that, the palette cycles through the 15 colors, starting with dark gray. A new game resets the glow to phosphor green.
 
-## 🛠️ Development
+</details>
 
-### Technologies Used
-- **HTML5 Canvas**: For game rendering and graphics
-- **Vanilla JavaScript**: No frameworks, pure JS implementation
-- **CSS3**: Responsive design and mobile optimizations
-- **Browser APIs**: Local storage via cookies, touch events
+## Open the back panel
 
-### Local Development
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/swinton/snake.git
-   cd snake
-   ```
+HTML5 Canvas draws the game. Vanilla JavaScript handles the snake, scoring, and keyboard and touch controls. CSS builds the cabinet. The game moves at a classic 10 FPS, and everything runs in the browser.
 
-2. Open `index.html` in a web browser or serve with a local server:
-   ```bash
-   # Using Python 3
-   python -m http.server 8000
-   
-   # Using Node.js
-   npx serve
-   ```
+### Run it locally
 
-3. Navigate to `http://localhost:8000` to play locally
+Clone the repo:
 
-### Link Previews
+```bash
+git clone https://github.com/swinton/snake.git
+cd snake
+```
+
+Open `index.html` directly, or start a local server:
+
+```bash
+# Using Python 3
+python -m http.server 8000
+
+# Using Node.js
+npx serve
+```
+
+For the Python server, open [localhost:8000](http://localhost:8000). With `npx serve`, use the URL it prints.
+
+### Share the cabinet
 
 The homepage includes Open Graph and Twitter Card metadata with an absolute HTTPS image URL. `social-preview.png` is a 1200 × 630 PNG styled to match the arcade cabinet. Messaging apps can cache previews, so previously shared messages may retain the older preview.
 
@@ -131,7 +118,8 @@ If you prefer **New > Static Site**, use these settings:
 
 High scores are saved in browser cookies for the site's domain, so scores from the GitHub Pages site won't transfer to the Render URL.
 
-### Project Structure
+### Project structure
+
 ```
 snake/
 ├── index.html          # Main HTML file and game container
@@ -145,32 +133,14 @@ snake/
 └── LICENSE             # MIT license
 ```
 
-## 🎯 Game Architecture
+### How the game fits together
 
-- **Object-Oriented Design**: Clean `SnakeGame` class structure
-- **Canvas Rendering**: Efficient 2D graphics with HTML5 Canvas
-- **Event-Driven**: Keyboard and touch event handling
-- **State Management**: Game state tracking (running, paused, game over)
-- **Responsive**: Automatic device detection and control adaptation
+`SnakeGame` in `snake.js` owns the snake, food, score, collision detection, and the waiting, playing, paused, and game-over states. Keyboard, touch, and cabinet inputs feed the same controls; the Canvas render loop draws the result and updates the score panel.
 
-## 🤝 Contributing
+## Got another idea for the arcade?
 
-Contributions are welcome! Feel free to:
-- Report bugs or issues
-- Suggest new features
-- Submit pull requests
-- Improve documentation
+Open an issue or send a pull request. Bugs, gameplay ideas, cabinet details, and documentation fixes are all welcome.
 
-## 📄 License
+Inspired by classic Nokia Snake. Built for one more game.
 
-This project is open source and available under the [MIT License](LICENSE).
-
-## 🌟 Acknowledgments
-
-- Inspired by the classic Nokia Snake game
-- Built as a modern web implementation with enhanced features
-- Designed for cross-platform accessibility
-
----
-
-**Enjoy playing! 🐍** Try to beat your high score and see all the cabinet glow colors!
+[MIT licensed](LICENSE). **No coins needed.**
