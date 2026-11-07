@@ -2,9 +2,9 @@
 
 A classic Snake game built with HTML5 Canvas and vanilla JavaScript, featuring dynamic backgrounds, persistent scoring, and full mobile support.
 
-## 🎮 [Play the Game](https://swinton.github.io/snake/)
+## 🎮 [Play the Game](https://snakesnakesnake.com/)
 
-**Live Demo:** https://swinton.github.io/snake/
+**Live Demo:** https://snakesnakesnake.com/
 
 ## ✨ Features
 
@@ -96,6 +96,18 @@ A classic Snake game built with HTML5 Canvas and vanilla JavaScript, featuring d
 ### Deploy to Render
 
 This game runs entirely in the browser and deploys as a [Render Static Site](https://render.com/docs/static-sites). No server, database, environment variables, or dependencies are required.
+
+The live deployment uses `snakesnakesnake.com`, registered and managed through Cloudflare. Both the apex and `www` have DNS-only CNAME records pointing to `snake-qez4.onrender.com`; Render redirects `www` to the apex and manages HTTPS certificates.
+
+To inspect or redeploy the existing service from a terminal after signing in with `render login`:
+
+```bash
+render workspace set tea-dbk49gs9v7es73blmdfg --confirm
+render deploys list srv-dbnpiq5g1s2s73db87m0 --output json
+render deploys create srv-dbnpiq5g1s2s73db87m0 --wait --confirm
+```
+
+To create a separate deployment:
 
 1. Commit and push `render.yaml` along with the application files to your GitHub repository.
 2. In the [Render Dashboard](https://dashboard.render.com/), select **New > Blueprint** and connect your repository.
