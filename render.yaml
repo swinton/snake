@@ -2,7 +2,7 @@ services:
   - type: web
     name: snake
     runtime: static
-    buildCommand: mkdir -p dist && cp index.html snake.js dist/
+    buildCommand: mkdir -p dist && cp index.html snake.js favicon.svg favicon.js dist/
     staticPublishPath: ./dist
     domains:
       - snakesnakesnake.com

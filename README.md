@@ -114,13 +114,13 @@ To create a separate deployment:
 3. Select the branch containing `render.yaml`, review the `snake` static site, and deploy it.
 4. Once deployment finishes, open the `onrender.com` URL shown by Render.
 
-The Blueprint copies `index.html` and `snake.js` into `dist/` and publishes that directory. Render automatically deploys subsequent pushes to the linked branch. See [Render's Blueprint setup guide](https://render.com/docs/infrastructure-as-code) for details.
+The Blueprint copies `index.html`, `snake.js`, `favicon.svg`, and `favicon.js` into `dist/` and publishes that directory. The favicon animates while the tab is visible and uses a static icon when reduced motion is enabled. Render automatically deploys subsequent pushes to the linked branch. See [Render's Blueprint setup guide](https://render.com/docs/infrastructure-as-code) for details.
 
 If you prefer **New > Static Site**, use these settings:
 
 | Setting | Value |
 | --- | --- |
-| Build Command | `mkdir -p dist && cp index.html snake.js dist/` |
+| Build Command | `mkdir -p dist && cp index.html snake.js favicon.svg favicon.js dist/` |
 | Publish Directory | `dist` |
 
 High scores are saved in browser cookies for the site's domain, so scores from the GitHub Pages site won't transfer to the Render URL.
@@ -130,6 +130,8 @@ High scores are saved in browser cookies for the site's domain, so scores from t
 snake/
 ├── index.html          # Main HTML file and game container
 ├── snake.js            # Game logic, controls, and rendering
+├── favicon.svg         # Static snake favicon and reduced-motion fallback
+├── favicon.js          # Animated tab icon
 ├── render.yaml         # Render Static Site deployment configuration
 ├── README.md           # This documentation
 └── LICENSE             # MIT license
