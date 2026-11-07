@@ -95,6 +95,10 @@ A classic Snake game built with HTML5 Canvas and vanilla JavaScript, styled as a
 
 3. Navigate to `http://localhost:8000` to play locally
 
+### Link Previews
+
+The homepage includes Open Graph and Twitter Card metadata with an absolute HTTPS image URL. `social-preview.png` is a 1200 × 630 PNG styled to match the arcade cabinet. Messaging apps can cache previews, so previously shared messages may retain the older preview.
+
 ### Deploy to Render
 
 This game runs entirely in the browser and deploys as a [Render Static Site](https://render.com/docs/static-sites). No server, database, environment variables, or dependencies are required.
@@ -116,13 +120,13 @@ To create a separate deployment:
 3. Select the branch containing `render.yaml`, review the `snake` static site, and deploy it.
 4. Once deployment finishes, open the `onrender.com` URL shown by Render.
 
-The Blueprint copies `index.html`, `404.html`, `snake.js`, `favicon.svg`, and `favicon.js` into `dist/` and publishes that directory. The favicon animates while the tab is visible and uses a static icon when reduced motion is enabled. Render automatically deploys subsequent pushes to the linked branch. See [Render's Blueprint setup guide](https://render.com/docs/infrastructure-as-code) for details.
+The Blueprint copies `index.html`, `404.html`, `snake.js`, `favicon.svg`, `favicon.js`, and `social-preview.png` into `dist/` and publishes that directory. The favicon animates while the tab is visible and uses a static icon when reduced motion is enabled. Render automatically deploys subsequent pushes to the linked branch. See [Render's Blueprint setup guide](https://render.com/docs/infrastructure-as-code) for details.
 
 If you prefer **New > Static Site**, use these settings:
 
 | Setting | Value |
 | --- | --- |
-| Build Command | `mkdir -p dist && cp index.html 404.html snake.js favicon.svg favicon.js dist/` |
+| Build Command | `mkdir -p dist && cp index.html 404.html snake.js favicon.svg favicon.js social-preview.png dist/` |
 | Publish Directory | `dist` |
 
 High scores are saved in browser cookies for the site's domain, so scores from the GitHub Pages site won't transfer to the Render URL.
@@ -135,6 +139,7 @@ snake/
 ├── snake.js            # Game logic, controls, and rendering
 ├── favicon.svg         # Static snake favicon and reduced-motion fallback
 ├── favicon.js          # Animated tab icon
+├── social-preview.png  # Open Graph and messaging link preview
 ├── render.yaml         # Render Static Site deployment configuration
 ├── README.md           # This documentation
 └── LICENSE             # MIT license
