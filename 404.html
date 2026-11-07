@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#100e18">
+    <meta name="robots" content="noindex">
+    <title>404 — Wrong Turn, Snake! | Snake Snake Snake</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <script src="/favicon.js" defer></script>
+    <style>
+        :root { color-scheme: dark; }
+        * { box-sizing: border-box; }
+        body { margin: 0; min-height: 100svh; display: grid; place-items: center; padding: 32px 22px; background: radial-gradient(ellipse at center, #35203966, transparent 70%), #100e18; color: #e8dfca; font-family: 'Courier New', monospace; }
+        .cabinet { width: min(100%, 720px); background: linear-gradient(110deg, #302934, #16151e 50%, #2b2630); padding: 14px; border: 1px solid #6b5262; border-radius: 18px; box-shadow: -7px 0 #08090e, -10px 0 #bf467e, 7px 0 #08090e, 10px 0 #45a3a8, 0 25px 80px #000b; }
+        .marquee { padding: 16px 8px; margin: 0 0 15px; text-align: center; border: 3px solid #08090d; background: repeating-linear-gradient(-55deg, transparent 0 30px, #ff4d9910 30px 32px), #241329; color: #ffd07c; font-size: clamp(17px, 4vw, 28px); font-weight: bold; font-style: italic; letter-spacing: .08em; text-shadow: 2px 2px #d3437c, 0 0 15px #ffb86244; }
+        .marquee span { color: #63e4e5; font-style: normal; }
+        .screen { position: relative; isolation: isolate; overflow: hidden; border: 9px solid #070a0a; border-radius: 28px; padding: 26px 26px 33px; text-align: center; background: linear-gradient(#17312555 1px, transparent 1px), linear-gradient(90deg, #17312555 1px, transparent 1px), #08110e; background-size: 26px 26px; box-shadow: 0 0 0 2px #4b414c, inset 0 0 65px #000; }
+        .screen::after { content: ''; position: absolute; z-index: 2; inset: 0; pointer-events: none; border-radius: 18px; background: repeating-linear-gradient(0deg, transparent 0 2px, #0003 2px 4px), radial-gradient(ellipse, transparent 45%, #0005); }
+        .status { display: flex; justify-content: space-between; gap: 10px; color: #d5aebc; font-size: 10px; letter-spacing: .1em; }
+        .status span:last-child { color: #ffd07c; }
+        .snake-art { display: block; width: 100%; max-width: 560px; height: auto; margin: 24px auto 16px; overflow: visible; filter: drop-shadow(0 0 7px #77ff8755); }
+        .body { fill: none; stroke: #8bff91; stroke-width: 19; stroke-linejoin: round; stroke-linecap: square; }
+        .scales { fill: none; stroke: #173125; stroke-width: 19; stroke-dasharray: 2 15; opacity: .4; }
+        .food { fill: #ff699b; filter: drop-shadow(0 0 6px #ff4d99); animation: float 2.8s ease-in-out infinite; }
+        .tongue { stroke: #ff699b; stroke-width: 3; fill: none; }
+        h1 { margin: 0 0 14px; font-size: clamp(22px, 5vw, 36px); line-height: 1.2; color: #ffd07c; text-shadow: 2px 2px #89425e; }
+        .message { margin: 0 auto 25px; max-width: 380px; color: #a2c5ad; font-size: 13px; line-height: 1.9; }
+        .return { position: relative; z-index: 3; display: inline-flex; align-items: center; justify-content: center; min-height: 51px; padding: 14px 23px; border: 2px solid #ff84b4; border-radius: 4px; color: #160d14; background: #ff75ac; box-shadow: 0 5px #8b2b55, 0 0 22px #ff4d9922; font-size: 13px; font-weight: bold; letter-spacing: .09em; text-decoration: none; }
+        .return:hover { background: #ffa1c7; box-shadow: 0 5px #8b2b55, 0 0 25px #ff4d9944; }
+        .return:active { transform: translateY(3px); box-shadow: 0 2px #8b2b55; }
+        .return:focus-visible { outline: 3px solid #63e4e5; outline-offset: 6px; }
+        .credit { margin: 26px 0 0; font-size: 10px; color: #7b9b86; letter-spacing: .14em; }
+        .base { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 20px 12px 7px; color: #a799ad; font-size: 9px; letter-spacing: .13em; }
+        .speaker { width: 68px; height: 25px; background: repeating-linear-gradient(0deg, #07070b 0 3px, #29252e 3px 5px); transform: skew(-12deg); }
+        @keyframes float { 50% { transform: translateY(-5px); } }
+        @media (prefers-reduced-motion: reduce) { .food { animation: none; } }
+        @media (max-width: 480px) { body { padding: 24px 16px; } .cabinet { padding: 9px; } .marquee { padding: 15px 4px; font-size: 15px; } .screen { padding: 22px 14px 26px; border-width: 7px; } .status { font-size: 8px; } .snake-art { margin-top: 28px; } .message { font-size: 12px; } .return { padding: 14px 16px; font-size: 11px; } .base { font-size: 7px; padding-inline: 5px; } }
+    </style>
+</head>
+<body>
+    <main class="cabinet">
+        <div class="marquee"><span>✦</span> SNAKE · SNAKE · SNAKE <span>✦</span></div>
+        <section class="screen" aria-labelledby="error-title">
+            <div class="status"><span>PLAYER ONE: LOST</span><span>ERROR CODE: 404</span></div>
+            <svg class="snake-art" viewBox="0 0 560 230" role="img" aria-labelledby="snake-title">
+                <title id="snake-title">404 drawn with three glowing green snakes chasing pink food</title>
+                <defs>
+                    <path id="four" d="M31 25 V119 H133 V25 H112 V202"/>
+                    <path id="zero" d="M323 75 V25 H219 V202 H323 V103"/>
+                </defs>
+                <g class="body"><use href="#four"/><use href="#zero"/><use href="#four" x="380"/></g>
+                <g class="scales"><use href="#four"/><use href="#zero"/><use href="#four" x="380"/></g>
+                <g fill="#d3ff9b"><rect x="101" y="187" width="22" height="23" rx="3"/><rect x="312" y="61" width="22" height="22" rx="3"/><rect x="481" y="187" width="22" height="23" rx="3"/></g>
+                <g fill="#08110e"><rect x="105" y="200" width="4" height="4"/><rect x="115" y="200" width="4" height="4"/><rect x="316" y="75" width="4" height="4"/><rect x="326" y="75" width="4" height="4"/><rect x="485" y="200" width="4" height="4"/><rect x="495" y="200" width="4" height="4"/></g>
+                <path class="tongue" d="M112 210v9m0 0-4 4m4-4 4 4M323 83v9m0 0-4 4m4-4 4 4M492 210v9m0 0-4 4m4-4 4 4"/>
+                <rect class="food" x="165" y="164" width="17" height="17" rx="2"/>
+                <rect class="food" x="365" y="46" width="17" height="17" rx="2"/>
+            </svg>
+            <h1 id="error-title">WRONG TURN, SNAKE!</h1>
+            <p class="message">You slithered off the map.<br>This page doesn't exist. The arcade does.</p>
+            <a class="return" href="/">↳ BACK TO THE ARCADE</a>
+            <p class="credit">NO COINS LOST. &nbsp; TRY ANOTHER ROUTE.</p>
+        </section>
+        <div class="base" aria-hidden="true"><span class="speaker"></span><span>FREE PLAY · CONTINUE? YES.</span></div>
+    </main>
+</body>
+</html>
