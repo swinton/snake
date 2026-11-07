@@ -1,6 +1,9 @@
 # Cursor cache files
 .dccache
 
+# Render build output
+dist/
+
 # OS generated files
 .DS_Store
 .DS_Store?

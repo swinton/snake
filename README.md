@@ -93,11 +93,32 @@ A classic Snake game built with HTML5 Canvas and vanilla JavaScript, featuring d
 
 3. Navigate to `http://localhost:8000` to play locally
 
+### Deploy to Render
+
+This game runs entirely in the browser and deploys as a [Render Static Site](https://render.com/docs/static-sites). No server, database, environment variables, or dependencies are required.
+
+1. Commit and push `render.yaml` along with the application files to your GitHub repository.
+2. In the [Render Dashboard](https://dashboard.render.com/), select **New > Blueprint** and connect your repository.
+3. Select the branch containing `render.yaml`, review the `snake` static site, and deploy it.
+4. Once deployment finishes, open the `onrender.com` URL shown by Render.
+
+The Blueprint copies `index.html` and `snake.js` into `dist/` and publishes that directory. Render automatically deploys subsequent pushes to the linked branch. See [Render's Blueprint setup guide](https://render.com/docs/infrastructure-as-code) for details.
+
+If you prefer **New > Static Site**, use these settings:
+
+| Setting | Value |
+| --- | --- |
+| Build Command | `mkdir -p dist && cp index.html snake.js dist/` |
+| Publish Directory | `dist` |
+
+High scores are saved in browser cookies for the site's domain, so scores from the GitHub Pages site won't transfer to the Render URL.
+
 ### Project Structure
 ```
 snake/
 ├── index.html          # Main HTML file and game container
 ├── snake.js            # Game logic, controls, and rendering
+├── render.yaml         # Render Static Site deployment configuration
 ├── README.md           # This documentation
 └── LICENSE             # MIT license
 ```

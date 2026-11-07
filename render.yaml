@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: snake
+    runtime: static
+    buildCommand: mkdir -p dist && cp index.html snake.js dist/
+    staticPublishPath: ./dist
