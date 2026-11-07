@@ -69,7 +69,7 @@ class SnakeGame {
         this.loadHighScore();
         
         // Set initial background color
-        document.body.style.backgroundColor = this.backgroundColors[0];
+        document.documentElement.style.setProperty('--cabinet-glow', '#77ff87');
         
         // Set up keyboard controls
         document.addEventListener('keydown', (e) => this.handleKeyPress(e));
@@ -77,6 +77,26 @@ class SnakeGame {
         // Set up touch controls for mobile
         this.canvas.addEventListener('touchstart', (e) => this.handleTouchStart(e));
         this.canvas.addEventListener('touchend', (e) => this.handleTouchEnd(e));
+
+        // The cabinet controls share the keyboard's gameplay behavior.
+        this.startButton = document.getElementById('startButton');
+        this.startButton.addEventListener('click', () => {
+            this.handleKeyPress({ key: ' ', preventDefault() {} });
+            this.draw();
+        });
+        document.querySelectorAll('[data-direction]').forEach(button => {
+            button.addEventListener('click', () => {
+                this.handleKeyPress({ key: button.dataset.direction, preventDefault() {} });
+            });
+        });
+        this.scoreDisplay = document.getElementById('scoreDisplay');
+        this.highScoreDisplay = document.getElementById('highScoreDisplay');
+        this.statusDisplay = document.getElementById('arcadeStatus');
+        this.actionLabel = document.getElementById('actionLabel');
+        if (this.isMobileDevice()) {
+            document.getElementById('instructions').innerHTML =
+                'SWIPE TO MOVE &nbsp; / &nbsp; TAP SCREEN TO PAUSE<br>OR USE THE CABINET CONTROLS';
+        }
         
         // Start the render loop (but game won't start until user input)
         this.renderLoop();
@@ -109,7 +129,7 @@ class SnakeGame {
         // Calculate which color to use based on score milestones
         const colorIndex = Math.floor(this.score / 10) % this.backgroundColors.length;
         const newColor = this.backgroundColors[colorIndex];
-        document.body.style.backgroundColor = newColor;
+        document.documentElement.style.setProperty('--cabinet-glow', newColor);
     }
     
     isMobileDevice() {
@@ -335,136 +355,81 @@ class SnakeGame {
         this.score = 0;
         
         // Reset background color to default
-        document.body.style.backgroundColor = this.backgroundColors[0];
+        document.documentElement.style.setProperty('--cabinet-glow', '#77ff87');
     }
     
     draw() {
-        // Clear canvas
-        this.ctx.fillStyle = '#1a1a1a';
-        this.ctx.fillRect(0, 0, this.canvasSize, this.canvasSize);
-        
-        // Draw grid lines (optional - for debugging)
-        this.ctx.strokeStyle = '#333';
-        this.ctx.lineWidth = 0.5;
-        for (let i = 0; i <= this.gridSize; i++) {
-            this.ctx.beginPath();
-            this.ctx.moveTo(i * this.squareSize, 0);
-            this.ctx.lineTo(i * this.squareSize, this.canvasSize);
-            this.ctx.stroke();
-            
-            this.ctx.beginPath();
-            this.ctx.moveTo(0, i * this.squareSize);
-            this.ctx.lineTo(this.canvasSize, i * this.squareSize);
-            this.ctx.stroke();
+        const ctx = this.ctx;
+        ctx.fillStyle = '#08110e';
+        ctx.fillRect(0, 0, this.canvasSize, this.canvasSize);
+
+        // Subtle phosphor grid and inset pixels leave the playfield readable.
+        ctx.strokeStyle = '#173125';
+        ctx.lineWidth = 0.5;
+        for (let i = 1; i < this.gridSize; i++) {
+            const position = i * this.squareSize;
+            ctx.beginPath();
+            ctx.moveTo(position, 0);
+            ctx.lineTo(position, this.canvasSize);
+            ctx.moveTo(0, position);
+            ctx.lineTo(this.canvasSize, position);
+            ctx.stroke();
         }
-        
-        // Draw snake
-        this.ctx.fillStyle = '#27ae60';
-        for (let i = 0; i < this.snake.length; i++) {
-            const segment = this.snake[i];
-            this.ctx.fillRect(
-                segment.x * this.squareSize,
-                segment.y * this.squareSize,
-                this.squareSize,
-                this.squareSize
-            );
-        }
-        
-        // Draw snake head differently
-        this.ctx.fillStyle = '#2ecc71';
-        const head = this.snake[0];
-        this.ctx.fillRect(
-            head.x * this.squareSize,
-            head.y * this.squareSize,
-            this.squareSize,
-            this.squareSize
-        );
-        
-        // Draw food
-        this.ctx.fillStyle = '#e74c3c';
-        this.ctx.fillRect(
-            this.food.x * this.squareSize,
-            this.food.y * this.squareSize,
-            this.squareSize,
-            this.squareSize
-        );
-        
-        // Draw waiting to start message
-        if (this.gameWaiting) {
-            this.ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-            this.ctx.fillRect(0, 0, this.canvasSize, this.canvasSize);
-            
-            this.ctx.fillStyle = '#3498db';
-            this.ctx.font = '24px Arial';
-            this.ctx.textAlign = 'center';
-            this.ctx.fillText('Snake Game', this.canvasSize / 2, this.canvasSize / 2 - 40);
-            
-            // Show appropriate start instructions
-            this.ctx.font = '16px Arial';
-            this.ctx.fillStyle = '#ffffff';
-            if (this.isMobileDevice()) {
-                this.ctx.fillText('Tap to start playing', this.canvasSize / 2, this.canvasSize / 2 - 10);
-            } else {
-                this.ctx.fillText('Press SPACE to start playing', this.canvasSize / 2, this.canvasSize / 2 - 10);
-            }
-        }
-        
-        // Draw game over message
-        if (!this.gameRunning && !this.gameWaiting) {
-            this.ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-            this.ctx.fillRect(0, 0, this.canvasSize, this.canvasSize);
-            
-            this.ctx.fillStyle = '#e74c3c';
-            this.ctx.font = '24px Arial';
-            this.ctx.textAlign = 'center';
-            this.ctx.fillText('Game Over!', this.canvasSize / 2, this.canvasSize / 2 - 40);
-            
-            // Show appropriate restart instructions
-            this.ctx.font = '16px Arial';
-            this.ctx.fillStyle = '#ffffff';
-            if (this.isMobileDevice()) {
-                this.ctx.fillText('Tap to play again', this.canvasSize / 2, this.canvasSize / 2 - 10);
-            } else {
-                this.ctx.fillText('Press SPACE to play again', this.canvasSize / 2, this.canvasSize / 2 - 10);
-            }
-        }
-        
-        // Draw pause message
-        if (this.gameRunning && this.gamePaused) {
-            this.ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-            this.ctx.fillRect(0, 0, this.canvasSize, this.canvasSize);
-            
-            this.ctx.fillStyle = '#f39c12';
-            this.ctx.font = '24px Arial';
-            this.ctx.textAlign = 'center';
-            this.ctx.fillText('PAUSED', this.canvasSize / 2, this.canvasSize / 2 - 30);
-            
-            // Show appropriate resume instructions
-            this.ctx.font = '16px Arial';
-            this.ctx.fillStyle = '#ffffff';
-            if (this.isMobileDevice()) {
-                this.ctx.fillText('Tap to resume', this.canvasSize / 2, this.canvasSize / 2);
-            } else {
-                this.ctx.fillText('Press SPACE to resume', this.canvasSize / 2, this.canvasSize / 2);
-            }
-        }
-        
-        // Draw score information
-        this.ctx.fillStyle = '#ffffff';
-        this.ctx.font = '16px Arial';
-        this.ctx.textAlign = 'left';
-        this.ctx.fillText(`Score: ${this.score}`, 10, 25);
-        this.ctx.fillText(`High Score: ${this.highScore}`, 10, 45);
-        
-        // Show mobile instructions on first load
-        if (this.score === 0 && this.gameRunning && !this.gamePaused && this.isMobileDevice()) {
-            this.ctx.font = '12px Arial';
-            this.ctx.textAlign = 'center';
-            this.ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
-            this.ctx.fillText('Swipe to move • Tap to pause', this.canvasSize / 2, this.canvasSize - 10);
+
+        ctx.shadowColor = '#77ff87';
+        ctx.shadowBlur = 9;
+        this.snake.forEach((segment, index) => {
+            ctx.fillStyle = index === 0 ? '#d3ff9b' : '#77ee83';
+            ctx.fillRect(segment.x * this.squareSize + 2,
+                segment.y * this.squareSize + 2,
+                this.squareSize - 4, this.squareSize - 4);
+        });
+        ctx.shadowColor = '#ff4d99';
+        ctx.fillStyle = '#ff699b';
+        ctx.fillRect(this.food.x * this.squareSize + 4,
+            this.food.y * this.squareSize + 4,
+            this.squareSize - 8, this.squareSize - 8);
+        ctx.shadowBlur = 0;
+
+        const status = this.gameWaiting ? 'READY PLAYER ONE' :
+            !this.gameRunning ? 'GAME OVER' : this.gamePaused ? 'PAUSED' : 'GO FOR THE HIGH SCORE';
+        const action = this.gameWaiting ? 'START' :
+            !this.gameRunning ? 'RETRY' : this.gamePaused ? 'RESUME' : 'PAUSE';
+        const score = String(this.score).padStart(4, '0');
+        const highScore = String(Math.max(this.highScore, this.score)).padStart(4, '0');
+        if (this.scoreDisplay.textContent !== score) this.scoreDisplay.textContent = score;
+        if (this.highScoreDisplay.textContent !== highScore) this.highScoreDisplay.textContent = highScore;
+        if (this.statusDisplay.textContent !== status) this.statusDisplay.textContent = status;
+        this.actionLabel.textContent = action;
+        this.startButton.setAttribute('aria-label', `${action.toLowerCase()} game`);
+
+        if (this.gameWaiting || !this.gameRunning || this.gamePaused) {
+            ctx.fillStyle = 'rgba(4, 12, 9, 0.88)';
+            ctx.fillRect(0, 0, this.canvasSize, this.canvasSize);
+            ctx.textAlign = 'center';
+            ctx.fillStyle = '#ffd07c';
+            ctx.font = 'bold 14px "Courier New", monospace';
+            ctx.fillText('S N A K E  /  S N A K E  /  S N A K E', 250, 168);
+            ctx.shadowColor = '#77ff87';
+            ctx.shadowBlur = 15;
+            ctx.fillStyle = '#a5ff9c';
+            ctx.font = 'bold 38px "Courier New", monospace';
+            ctx.fillText(this.gameWaiting ? 'PRESS START' :
+                !this.gameRunning ? 'GAME OVER' : 'PAUSED', 250, 234);
+            ctx.shadowBlur = 0;
+            ctx.fillStyle = '#78b58c';
+            ctx.font = 'bold 14px "Courier New", monospace';
+            ctx.fillText(this.gameWaiting ? 'A CLASSIC. ONE MORE TIME.' :
+                !this.gameRunning ? `YOUR SCORE  ${score}` : 'TAKE A BREATHER, PLAYER ONE.', 250, 270);
+            ctx.fillStyle = '#f394b6';
+            ctx.font = 'bold 12px "Courier New", monospace';
+            ctx.fillText(this.isMobileDevice() ? 'TAP SCREEN OR PRESS THE BUTTON' :
+                'PRESS SPACE OR THE CABINET BUTTON', 250, 324);
+            ctx.fillStyle = '#567360';
+            ctx.fillText('CREDIT  ∞               FREE PLAY', 250, 450);
         }
     }
-    
+
     renderLoop() {
         // Only update game state if game is running and not paused
         if (this.gameRunning && !this.gamePaused) {

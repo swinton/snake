@@ -1,6 +1,6 @@
 # 🐍 Snake Game
 
-A classic Snake game built with HTML5 Canvas and vanilla JavaScript, featuring dynamic backgrounds, persistent scoring, and full mobile support.
+A classic Snake game built with HTML5 Canvas and vanilla JavaScript, styled as a 1980s arcade cabinet, with persistent scoring and full mobile support.
 
 ## 🎮 [Play the Game](https://snakesnakesnake.com/)
 
@@ -19,8 +19,9 @@ A classic Snake game built with HTML5 Canvas and vanilla JavaScript, featuring d
 - **Score Display**: Current and high scores visible during gameplay
 
 ### 🌈 Visual Features
-- **Dynamic Backgrounds**: Background color changes every 10 points scored
-- **15 Color Palette**: Beautiful progression through different background colors
+- **Arcade Cabinet**: Neon marquee, metal control deck, speaker grille, and free-play coin slot
+- **CRT Screen**: Scanlines, screen reflections, and glowing phosphor graphics
+- **Milestone Glow**: Cabinet lighting changes color every 10 points scored
 - **Visual Feedback**: Clear game states (playing, paused, game over)
 - **Responsive Design**: Optimized for both desktop and mobile devices
 
@@ -28,7 +29,8 @@ A classic Snake game built with HTML5 Canvas and vanilla JavaScript, featuring d
 
 #### Desktop
 - **Arrow Keys**: Control snake direction (↑ ↓ ← →)
-- **Spacebar**: Pause/resume game or restart after game over
+- **Spacebar**: Start, pause/resume, or restart after game over
+- **Cabinet Controls**: Click the direction pad to steer and the pink button to start, pause, resume, or restart
 
 #### Mobile & Touch Devices
 - **Swipe Gestures**: Swipe in any direction to move the snake
@@ -43,15 +45,15 @@ A classic Snake game built with HTML5 Canvas and vanilla JavaScript, featuring d
 
 ## 🚀 How to Play
 
-1. **Start**: The snake begins moving automatically
+1. **Start**: Press space, tap the canvas, or press the pink cabinet button
 2. **Control**: Use arrow keys (desktop) or swipe (mobile) to change direction
-3. **Eat**: Guide the snake to the red food squares to grow and score points
+3. **Eat**: Guide the snake to the pink food squares to grow and score points
 4. **Avoid**: Don't hit the walls or the snake's own body
 5. **Pause**: Press spacebar (desktop) or tap the screen (mobile) to pause
-6. **Score**: Try to beat your high score and unlock new background colors!
+6. **Score**: Try to beat your high score and unlock new cabinet glow colors!
 
-### 🎨 Background Color Progression
-- **Score 0-9**: Dark Gray
+### 🎨 Cabinet Glow Progression
+- **Score 0-9**: Phosphor Green
 - **Score 10-19**: Dark Blue-Gray
 - **Score 20-29**: Purple
 - **Score 30-39**: Red
@@ -165,4 +167,4 @@ This project is open source and available under the [MIT License](LICENSE).
 
 ---
 
-**Enjoy playing! 🐍** Try to beat your high score and see all the background colors!
+**Enjoy playing! 🐍** Try to beat your high score and see all the cabinet glow colors!

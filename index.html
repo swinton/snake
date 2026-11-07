@@ -3,89 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Snake Game</title>
+    <meta name="theme-color" content="#100e18">
+    <meta name="description" content="Snake Snake Snake. A little neon, a little nostalgia. Step up to the cabinet and beat your high score.">
+    <title>Snake Snake Snake — Arcade</title>
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <script src="favicon.js" defer></script>
     <style>
+        :root { color-scheme: dark; --pink: #ff4d99; --cyan: #63e4e5; --amber: #ffd07c; --cabinet-glow: #77ff87; }
+        * { box-sizing: border-box; }
         body {
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background-color: #2c3e50;
-            font-family: Arial, sans-serif;
+            margin: 0; min-height: 100svh; padding: 38px 20px 24px; color: #e8dfca;
+            font-family: 'Courier New', monospace;
+            background: radial-gradient(ellipse at 50% 30%, #35203966, transparent 60%), #100e18;
         }
-        
-        .game-container {
-            text-align: center;
+        body::before { content: ''; position: fixed; inset: 0; pointer-events: none; opacity: .13; background: repeating-linear-gradient(0deg, transparent 0 3px, #000 3px 4px); }
+        .room-label { text-align: center; font-size: 10px; letter-spacing: .32em; color: #a399ad; margin-bottom: 22px; }
+        .room-label span { color: var(--pink); }
+        .cabinet { max-width: 650px; margin: auto; position: relative; padding: 12px 16px 0; background: linear-gradient(90deg, #08080d, #2a2830 2%, #16151e 5% 95%, #302a32 98%, #08080d); border: 1px solid #4b414c; border-radius: 18px 18px 5px 5px; box-shadow: 0 24px 80px #000b, -8px 0 0 #08090e, 8px 0 0 #08090e, -11px 0 0 #bf467e, 11px 0 0 #45a3a8; }
+        .marquee { position: relative; overflow: hidden; text-align: center; padding: 15px 8px 12px; background: repeating-linear-gradient(-55deg, transparent 0 32px, #ff4d9910 32px 34px), radial-gradient(ellipse, #3c1743, #140f20 75%); border: 3px solid #08090d; outline: 1px solid #6b5262; box-shadow: inset 0 0 25px #e6368b35, 0 4px 0 #06070b; }
+        .marquee::before, .marquee::after { content: '✦'; position: absolute; top: 29px; color: var(--cyan); font-size: 30px; text-shadow: 0 0 15px #63e4e599; }
+        .marquee::before { left: 27px; } .marquee::after { right: 27px; }
+        .marquee small { color: var(--cyan); font-size: 9px; letter-spacing: .45em; }
+        h1 { margin: 3px 0 0; font-family: Impact, 'Arial Black', sans-serif; font-style: italic; font-size: clamp(42px, 10vw, 70px); line-height: 1; letter-spacing: .06em; color: var(--amber); text-shadow: 3px 3px 0 #d3437c, 6px 6px 0 #692d63, 0 0 25px #ffb86255; }
+        .marquee p { margin: 8px 0 0; color: #f49cc0; font-size: 9px; font-weight: bold; letter-spacing: .5em; }
+        .monitor-panel { padding: 19px 28px 20px; background: linear-gradient(110deg, #26232b, #15141b 45%, #25232b); border-bottom: 2px solid #050509; }
+        .scores { display: flex; justify-content: space-between; align-items: center; margin: 0 3px 12px; }
+        .score { display: grid; gap: 4px; font-size: 9px; letter-spacing: .18em; color: #a89ba6; }
+        .score:last-child { text-align: right; }
+        .score strong { color: var(--amber); font-size: 22px; letter-spacing: .12em; font-variant-numeric: tabular-nums; text-shadow: 0 0 10px #ffd07c55; }
+        .player { align-self: center; color: #ff75ac; font-size: 10px; letter-spacing: .12em; }
+        .screen { position: relative; overflow: hidden; border: 9px solid #070a0a; border-radius: 28px; background: #08110e; box-shadow: 0 0 0 2px #3c393e, 0 4px 0 3px #08090c, 0 0 30px color-mix(in srgb, var(--cabinet-glow) 9%, transparent); }
+        canvas { display: block; width: 100%; height: auto; aspect-ratio: 1; touch-action: none; }
+        .screen::after { content: ''; position: absolute; inset: 0; border-radius: 18px; pointer-events: none; background: repeating-linear-gradient(0deg, #0000 0 2px, #0003 2px 4px), radial-gradient(ellipse, transparent 48%, #0008), linear-gradient(125deg, #ffffff07, transparent 35%); box-shadow: inset 0 0 24px #000b; }
+        .screen-caption { display: flex; justify-content: space-between; margin: 13px 3px 0; color: #827987; font-size: 8px; letter-spacing: .16em; }
+        .power { color: #a9c598; } .power::before { content: ''; display: inline-block; width: 5px; height: 5px; background: #93ff8b; border-radius: 50%; margin-right: 7px; box-shadow: 0 0 7px #93ff8b; }
+        .control-deck { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 15px 36px 17px; background: repeating-linear-gradient(0deg, #ffffff03 0 1px, transparent 1px 3px), linear-gradient(#35303b, #1c1b25); border-top: 2px solid #5b4a59; border-bottom: 5px solid #08090e; box-shadow: 0 6px 0 #2d2632; }
+        .control-deck::before, .control-deck::after { content: '+'; position: absolute; color: #807783; font-size: 16px; top: 8px; text-shadow: 0 1px #000; }
+        .control-deck::before { left: 9px; } .control-deck::after { right: 9px; }
+        .direction-pad { width: 108px; height: 100px; position: relative; flex-shrink: 0; }
+        .direction-pad button { position: absolute; width: 34px; height: 30px; padding: 0; background: #11111a; border: 1px solid #635368; border-radius: 5px; color: var(--cyan); font-size: 19px; box-shadow: 0 3px 0 #06060b; }
+        [data-direction="ArrowUp"] { top: 0; left: 37px; } [data-direction="ArrowLeft"] { top: 34px; left: 0; } [data-direction="ArrowRight"] { top: 34px; right: 0; } [data-direction="ArrowDown"] { bottom: 0; left: 37px; }
+        .joystick { position: absolute; width: 28px; height: 28px; border-radius: 50%; top: 35px; left: 40px; background: radial-gradient(circle at 35% 25%, #ff82b0, #cb2762 50%, #65172e); box-shadow: 0 5px 0 #110c12, 0 6px 8px #000; pointer-events: none; }
+        .deck-copy { font-size: 9px; line-height: 1.8; letter-spacing: .1em; color: #c1b2c2; text-align: center; }
+        .deck-copy b { color: var(--amber); font-size: 11px; letter-spacing: .15em; } .deck-copy span { display: block; }
+        .action { text-align: center; min-width: 78px; }
+        #startButton { display: block; margin: 0 auto 10px; width: 59px; height: 59px; border-radius: 50%; border: 4px solid #21121d; background: radial-gradient(circle at 35% 25%, #ff8fbd, #f3478b 45%, #bb1856); box-shadow: 0 0 0 2px #6d4c64, 0 6px 0 2px #100b13, 0 10px 12px #0007; }
+        button { cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+        button:active { translate: 0 3px; } button:focus-visible { outline: 2px solid var(--amber); outline-offset: 5px; }
+        .action label { font-size: 9px; color: var(--amber); letter-spacing: .2em; pointer-events: none; }
+        .cabinet-base { padding: 17px 24px; display: flex; justify-content: space-between; align-items: center; min-height: 67px; }
+        .speaker { width: 84px; height: 30px; background: repeating-linear-gradient(0deg, #050509 0 3px, #29252e 3px 5px); transform: skew(-12deg); opacity: .9; }
+        .coin-slot { border: 2px solid #544853; padding: 7px 12px; border-radius: 3px; background: #0d0c12; font-size: 8px; letter-spacing: .16em; color: #f39c75; box-shadow: inset 0 0 6px #000; }
+        .coin-slot::before { content: ''; display: inline-block; width: 3px; height: 16px; background: #030305; border: 1px solid #645463; vertical-align: middle; margin-right: 10px; }
+        .instructions { text-align: center; font-size: 10px; line-height: 1.8; color: #a599ae; max-width: 650px; margin: 21px auto 0; letter-spacing: .03em; }
+        .footer { text-align: center; font-size: 8px; letter-spacing: .22em; margin-top: 12px; color: #675d73; }
+        @media (max-width: 520px) {
+            body { padding: 20px 16px; } .room-label { font-size: 8px; letter-spacing: .18em; margin-bottom: 15px; }
+            .cabinet { padding: 9px 9px 0; border-radius: 12px 12px 4px 4px; }
+            .marquee { padding: 12px 3px 10px; } .marquee::before { left: 10px; } .marquee::after { right: 10px; } .marquee::before, .marquee::after { font-size: 18px; top: 30px; }
+            .marquee small { font-size: 7px; letter-spacing: .25em; } .marquee p { font-size: 7px; letter-spacing: .3em; }
+            .monitor-panel { padding: 16px 12px; } .screen { border-width: 7px; border-radius: 20px; }
+            .score strong { font-size: 18px; } .player { font-size: 8px; } .score { font-size: 8px; }
+            .control-deck { padding: 15px 17px; gap: 6px; } .deck-copy { font-size: 7px; } .deck-copy b { font-size: 9px; }
+            .cabinet-base { padding: 16px 12px; } .speaker { width: 60px; } .screen-caption { font-size: 6px; }
         }
-        
-        h1 {
-            color: #ecf0f1;
-            margin-bottom: 20px;
-        }
-        
-        canvas {
-            border: 3px solid #34495e;
-            background-color: #1a1a1a;
-            max-width: 100%;
-            height: auto;
-        }
-        
-        /* Mobile-specific styles */
-        @media (max-width: 600px) {
-            body {
-                padding: 10px;
-            }
-            
-            h1 {
-                font-size: 1.5em;
-                margin-bottom: 10px;
-            }
-            
-            canvas {
-                width: calc(100vw - 40px);
-                max-width: 400px;
-                height: calc(100vw - 40px);
-                max-height: 400px;
-            }
-            
-            .instructions {
-                font-size: 14px;
-                margin-top: 10px;
-            }
-        }
-        
-        .instructions {
-            color: #bdc3c7;
-            margin-top: 20px;
-            font-size: 16px;
-        }
+        @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; } }
     </style>
 </head>
 <body>
-    <div class="game-container">
-        <h1>Snake Game</h1>
-        <canvas id="gameCanvas" width="500" height="500"></canvas>
-        <div class="instructions" id="instructions">
-            Press SPACE to start • Use arrow keys to control the snake • Press space to pause
-        </div>
-    </div>
-    
+    <div class="room-label"><span>●</span> THE ARCADE IS OPEN. &nbsp; YOU'RE UP NEXT.</div>
+    <main class="cabinet" aria-label="Snake Snake Snake arcade cabinet">
+        <header class="marquee">
+            <small>THE ORIGINAL ONE-PLAYER OBSESSION</small>
+            <h1>SNAKE</h1>
+            <p>SNAKE · SNAKE · SNAKE</p>
+        </header>
+        <section class="monitor-panel" aria-label="Game screen">
+            <div class="scores">
+                <div class="score">1UP<strong id="scoreDisplay">0000</strong></div>
+                <span class="player" id="arcadeStatus" role="status">READY PLAYER ONE</span>
+                <div class="score">HI-SCORE<strong id="highScoreDisplay">0000</strong></div>
+            </div>
+            <div class="screen">
+                <canvas id="gameCanvas" width="500" height="500" aria-label="Snake game. Use arrow keys to move and space to start or pause."></canvas>
+            </div>
+            <div class="screen-caption"><span>COLOR VECTOR SYSTEM / 01</span><span class="power">POWER</span></div>
+        </section>
+        <section class="control-deck" aria-label="Arcade controls">
+            <div class="direction-pad" role="group" aria-label="Move snake">
+                <button type="button" data-direction="ArrowUp" aria-label="Move up">↑</button>
+                <button type="button" data-direction="ArrowLeft" aria-label="Move left">←</button>
+                <span class="joystick" aria-hidden="true"></span>
+                <button type="button" data-direction="ArrowRight" aria-label="Move right">→</button>
+                <button type="button" data-direction="ArrowDown" aria-label="Move down">↓</button>
+            </div>
+            <div class="deck-copy"><b>EAT. GROW. REPEAT.</b><span>AVOID THE WALLS.</span><span>DON'T EAT YOURSELF.</span></div>
+            <div class="action"><button type="button" id="startButton" aria-label="Start game"></button><label id="actionLabel" for="startButton">START</label></div>
+        </section>
+        <div class="cabinet-base" aria-hidden="true"><div class="speaker"></div><div class="coin-slot">FREE PLAY · NO COINS NEEDED</div></div>
+    </main>
+    <p class="instructions" id="instructions">ARROW KEYS TO MOVE &nbsp; / &nbsp; SPACE TO START &amp; PAUSE<br>OR USE THE CABINET CONTROLS</p>
+    <footer class="footer">SNAKESNAKESNAKE.COM &nbsp; · &nbsp; JUST ONE MORE GAME.</footer>
     <script src="snake.js"></script>
-    <script>
-        // Update instructions based on device type
-        window.addEventListener('load', () => {
-            const instructions = document.getElementById('instructions');
-            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
-                             ('ontouchstart' in window);
-            
-            if (isMobile) {
-                instructions.textContent = 'Tap to start • Swipe to move the snake • Tap to pause';
-            }
-        });
-    </script>
 </body>
 </html>
